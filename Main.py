@@ -264,7 +264,7 @@ data_test = pd.read_csv('houses-test.csv', quotechar='"')
 #sns.relplot(y='SalePrice',x='LotArea', data=data_train)
 
 #plt.show()
-
+Id = data_test['Id']
 sale_price = data_train['SalePrice']
 data_train = data_train.drop(columns=['SalePrice'])
 #DataFrame with training and test data for one time manipulation
@@ -399,7 +399,7 @@ test = data_test.values
 y = sale_price.values
 X_train, X_test, y_train, y_test = train_test_split(x,y, test_size=0.2)
 
-## Basic Ensemble Learning with tuning 
+## Basic Ensemble Learning with tuning
 gbrt = GradientBoostingRegressor(n_estimators=100)
 gbrt.fit(X_train, y_train)
 y_predict = gbrt.predict(X_test)
@@ -409,3 +409,8 @@ print("R^2 for Train")
 print(gbrt.score(X_train, y_train))
 print("R^2 for Test")
 print(gbrt.score(X_test,y_test))
+# Run on test and output csv file to be submitted
+y_submit = gbrt.predict(data_test)
+output = {'Id':Id, 'SalePrice':y_submit}
+df = pd.DataFrame(data=output)
+df.to_csv('predictions.csv', index=False)
