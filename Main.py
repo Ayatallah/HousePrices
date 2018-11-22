@@ -2,6 +2,9 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import GradientBoostingRegressor
 
 data_train = pd.read_csv('houses-train.csv',  quotechar='"')
 data_test = pd.read_csv('houses-test.csv', quotechar='"')
@@ -271,7 +274,7 @@ data = data.drop(columns=['YrSold','MiscFeature','MiscVal','LowQualFinSF','BsmtF
                           'BsmtFinType1', 'BsmtFinType2', 'BsmtFinSF1', 'BsmtFinSF2', 'ScreenPorch', 'PoolQC','BsmtExposure', 'CentralAir','Electrical',
                           'BedroomAbvGr','SaleType','Fence','Utilities','PoolArea', 'PoolQC', 'MasVnrType', 'Condition1', 'Condition2','Functional', 'Alley','OpenPorchSF',
                           'EnclosedPorch', 'Id', 'FireplaceQu'])
-print(data.info())
+#print(data.info())
 #Fill Missing Values
 #print(data['GarageQual'].describe())
 #print(data['GarageQual'].isnull().values.any())
@@ -295,3 +298,97 @@ data['Exterior1st'].fillna(str(data.Exterior1st.mode()[0]), inplace=True)
 data['LotFrontage'].fillna(data['LotFrontage'].mean(), inplace=True)
 data['MSZoning']=data['MSZoning'].replace(np.nan, str(data.MSZoning.mode()[0]), regex=True)
 print(data.info())
+#Turning Categorical Data into Numerical
+print(data_train['MSZoning'].unique())
+print(data_train['MSZoning'].describe())
+
+print(data['Street'].unique())
+print(data['Street'].describe())
+
+print(data['LotShape'].unique())
+print(data['LotShape'].describe())
+
+print(data['LandContour'].unique())
+print(data['LandContour'].describe())
+
+print(data['LotConfig'].unique())
+print(data['LotConfig'].describe())
+
+print(data['LandSlope'].unique())
+print(data['LandSlope'].describe())
+
+print(data['Neighborhood'].unique())
+print(data['Neighborhood'].describe())
+
+print(data['BldgType'].unique())
+print(data['BldgType'].describe())
+
+print(data['HouseStyle'].unique())
+print(data['HouseStyle'].describe())
+
+print(data['RoofStyle'].unique())
+print(data['RoofStyle'].describe())
+
+print(data['RoofMatl'].unique())
+print(data['RoofMatl'].describe())
+
+print(data['Exterior1st'].unique())
+print(data['Exterior1st'].describe())
+
+print(data['Exterior2nd'].unique())
+print(data['Exterior2nd'].describe())
+
+print(data['ExterQual'].unique())
+print(data['ExterQual'].describe())
+
+print(data['ExterCond'].unique())
+print(data['ExterCond'].describe())
+
+print(data['Foundation'].unique())
+print(data['Foundation'].describe())
+
+print(data['BsmtQual'].unique())
+print(data['BsmtQual'].describe())
+
+print(data['BsmtCond'].unique())
+print(data['BsmtCond'].describe())
+
+print(data['Heating'].unique())
+print(data['Heating'].describe())
+
+print(data['HeatingQC'].unique())
+print(data['HeatingQC'].describe())
+
+print(data['KitchenQual'].unique())
+print(data['KitchenQual'].describe())
+
+print(data['GarageType'].unique())
+print(data['GarageType'].describe())
+
+print(data['GarageFinish'].unique())
+print(data['GarageFinish'].describe())
+
+print(data['GarageQual'].unique())
+print(data['GarageQual'].describe())
+
+print(data['PavedDrive'].unique())
+print(data['PavedDrive'].describe())
+
+print(data['SaleCondition'].unique())
+print(data['SaleCondition'].describe())
+
+## Features with seemingly effective variations
+data = pd.get_dummies(data, columns={'MSZoning', 'LotShape','LandContour','LotConfig','LandSlope','Neighborhood','HouseStyle','RoofStyle','Exterior1st','Exterior2nd','ExterQual',
+                                          'ExterCond','BsmtQual', 'HeatingQC','KitchenQual','GarageFinish','SaleCondition'})
+## Features with only two category or only two distictive categories
+data['BldgType']= data['BldgType'].replace({'1Fam':1, '2fmCon':0, 'Duplex':0,'TwnhsE':0,'Twnhs':0})
+data['Street']= data['Street'].replace({'Pave':1, 'Grvl':0})
+data['RoofMatl']= data['RoofMatl'].replace({'CompShg':1, 'WdShngl':0, 'Metal':0, 'WdShake':0, 'Membran':0, 'Tar&Grv':0, 'Roll':0, 'ClyTile':0})
+data['Foundation']= data['Foundation'].replace({'PConc':1, 'CBlock':0, 'BrkTil':0, 'Wood':0, 'Slab':0, 'Stone':0})
+data['BsmtCond']= data['BsmtCond'].replace({'TA':1, 'Gd':0, 'Fa':0, 'Po':0})
+data['Heating']= data['Heating'].replace({'GasA':1, 'GasW':0, 'Grav':0, 'Wall':0, 'OthW':0, 'Floor':0})
+data['GarageType']= data['GarageType'].replace({'Attchd':1, 'BuiltIn':1, 'Detchd':0, 'CarPort':0, 'Basment':0, '2Types':0})
+data['GarageQual']= data['GarageQual'].replace({'TA':1, 'Gd':0, 'Fa':0, 'Po':0, 'Ex':0})
+data['PavedDrive']= data['PavedDrive'].replace({'Y':1, 'N':0, 'P':0})
+print(data.info())
+
