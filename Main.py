@@ -392,3 +392,9 @@ data['GarageQual']= data['GarageQual'].replace({'TA':1, 'Gd':0, 'Fa':0, 'Po':0, 
 data['PavedDrive']= data['PavedDrive'].replace({'Y':1, 'N':0, 'P':0})
 print(data.info())
 
+data_train = data.iloc[:1460]
+data_test = data.iloc[1460:]
+x = data_train.values
+test = data_test.values
+y = sale_price.values
+X_train, X_test, y_train, y_test = train_test_split(x,y, test_size=0.2)
