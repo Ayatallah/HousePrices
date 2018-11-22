@@ -399,7 +399,7 @@ test = data_test.values
 y = sale_price.values
 X_train, X_test, y_train, y_test = train_test_split(x,y, test_size=0.2)
 
-## Basic Ensemble Learning with tuning
+## Basic Ensemble Learning without tuning
 gbrt = GradientBoostingRegressor(n_estimators=100)
 gbrt.fit(X_train, y_train)
 y_predict = gbrt.predict(X_test)
