@@ -1,6 +1,7 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
 
 data_train = pd.read_csv('houses-train.csv',  quotechar='"')
 data_test = pd.read_csv('houses-test.csv', quotechar='"')
@@ -260,3 +261,37 @@ data_test = pd.read_csv('houses-test.csv', quotechar='"')
 #sns.relplot(y='SalePrice',x='LotArea', data=data_train)
 
 #plt.show()
+
+sale_price = data_train['SalePrice']
+data_train = data_train.drop(columns=['SalePrice'])
+#DataFrame with training and test data for one time manipulation
+data = pd.concat([data_train, data_test])
+#Drop Ineffective feature as per visualizations
+data = data.drop(columns=['YrSold','MiscFeature','MiscVal','LowQualFinSF','BsmtFullBath','BsmtHalfBath', 'HalfBath','GarageCond', '3SsnPorch',
+                          'BsmtFinType1', 'BsmtFinType2', 'BsmtFinSF1', 'BsmtFinSF2', 'ScreenPorch', 'PoolQC','BsmtExposure', 'CentralAir','Electrical',
+                          'BedroomAbvGr','SaleType','Fence','Utilities','PoolArea', 'PoolQC', 'MasVnrType', 'Condition1', 'Condition2','Functional', 'Alley','OpenPorchSF',
+                          'EnclosedPorch', 'Id', 'FireplaceQu'])
+print(data.info())
+#Fill Missing Values
+#print(data['GarageQual'].describe())
+#print(data['GarageQual'].isnull().values.any())
+data['GarageQual'].fillna(str(data.GarageQual.mode()[0]), inplace=True)
+#print(data['GarageQual'].describe())
+#print(data['GarageQual'].isnull().values.any())
+data['GarageQual'].fillna(str(data.GarageQual.mode()[0]), inplace=True)
+data['GarageArea'].fillna(data.GarageArea.mean(), inplace=True)
+data['GarageCars'].fillna(data.GarageCars.median(), inplace=True)
+data['GarageFinish']=data['GarageFinish'].replace(np.nan, str(data.GarageFinish.mode()[0]), regex=True)
+data['GarageYrBlt']=data['GarageYrBlt'].replace(np.nan, data.GarageYrBlt.median(), regex=True)
+data['GarageType']=data['GarageType'].replace(np.nan, str(data.GarageType.mode()[0]), regex=True)
+data['KitchenQual'].fillna(str(data.KitchenQual.mode()[0]), inplace=True)
+data['TotalBsmtSF'].fillna(data.TotalBsmtSF.mean(), inplace=True)
+data['BsmtUnfSF'].fillna(data.BsmtUnfSF.mean(), inplace=True)
+data['BsmtCond'].fillna(str(data.BsmtCond.mode()[0]), inplace=True)
+data['BsmtQual'].fillna(str(data.BsmtQual.mode()[0]), inplace=True)
+data['MasVnrArea'].fillna(data.MasVnrArea.mean(), inplace=True)
+data['Exterior2nd'].fillna(str(data.Exterior2nd.mode()[0]), inplace=True)
+data['Exterior1st'].fillna(str(data.Exterior1st.mode()[0]), inplace=True)
+data['LotFrontage'].fillna(data['LotFrontage'].mean(), inplace=True)
+data['MSZoning']=data['MSZoning'].replace(np.nan, str(data.MSZoning.mode()[0]), regex=True)
+print(data.info())
